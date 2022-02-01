@@ -76,9 +76,9 @@ class ExportTorchScript:
         self.model = torch.jit.script(self.model)
 
         if self.args.precision == 'float16':
-            output_filename = "DPT_" + self.args.variant + "_fp16_" + self.args.output
+            output_filename = "MiDaSv3_" + self.args.variant + "_fp16_" + self.args.output
         else:
-            output_filename = "DPT_" + self.args.variant + "_fp32_" + self.args.output
+            output_filename = "MiDaSv3_" + self.args.variant + "_fp32_" + self.args.output
 
         print(output_filename)
         self.model.save(output_filename)
