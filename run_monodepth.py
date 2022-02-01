@@ -111,8 +111,9 @@ def run(input_path, output_path, model_path, model_type="dpt_hybrid", optimize=T
     model.eval()
 
     if optimize == True and device == torch.device("cuda"):
+        ## TODO: channels_last + half doesn't work in PyTorch 1.9, revisit!
+        # model = model.to(memory_format=torch.channels_last)  
         model = torch.jit.script(model)
-        model = model.to(memory_format=torch.channels_last)
         model = model.half()
 
     model.to(device)

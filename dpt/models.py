@@ -69,8 +69,9 @@ class DPT(BaseModel):
             self.load(path)
 
     def forward_features(self, x):
-        if self.channels_last == True:
-            x.contiguous(memory_format=torch.channels_last)
+        ## TODO: channels_last + half doesn't work in PyTorch 1.9, revisit!
+#        if self.channels_last == True:
+#            x.contiguous(memory_format=torch.channels_last)
 
         layer_1, layer_2, layer_3, layer_4 = self.pretrained(x)
 
