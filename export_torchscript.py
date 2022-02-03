@@ -24,7 +24,7 @@ class ExportTorchScript:
         
     def parse_args(self):
         parser = argparse.ArgumentParser()
-        parser.add_argument('--variant', type=str, required=True, choices=['dpt_hybrid'])
+        parser.add_argument('--variant', type=str, required=True, choices=['dpt_hybrid','dpt_hybrid_kitti','dpt_hybrid_nyu'])
         parser.add_argument('--model_weights', type=str, default=None) 
         parser.add_argument('--precision', type=str, default='float16')
         parser.add_argument('--output', type=str, required=True)
@@ -36,6 +36,9 @@ class ExportTorchScript:
 
         default_models = {
             "dpt_hybrid": "weights/dpt_hybrid-midas-d889a10e.pt",
+            "dpt_hybrid_kitti": "weights/dpt_hybrid-kitti-e7069aae.pt",
+            "dpt_hybrid_nyu": "weights/dpt_hybrid-nyu-b3a2ef48.pt",
+            
         }
 
         if self.args.model_weights is None:
@@ -45,6 +48,7 @@ class ExportTorchScript:
         if self.args.variant == "dpt_hybrid": #DPT-Hybrid
             self.model = DPTDepthModel(
                 path=model_path,
+                invert=True,
                 backbone="vitb_rn50_384",
                 non_negative=True,
                 enable_attention_hooks=False,
@@ -52,6 +56,38 @@ class ExportTorchScript:
             self.net_w, self.net_h = 384, 384
             resize_mode="minimal"
             normalization = NormalizeImage(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+
+        elif self.args.variant == "dpt_hybrid_kitti":
+
+            self.model = DPTDepthModel(
+                path=model_path,
+                scale=0.00006016,
+                shift=0.00579,
+                invert=True,
+                backbone="vitb_rn50_384",
+                non_negative=True,
+                enable_attention_hooks=False,
+            )
+            self.net_w = 1216
+            self.net_h = 352
+            resize_mode="minimal"
+            normalization = NormalizeImage(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+
+        elif self.args.variant == "dpt_hybrid_nyu":
+            self.model = DPTDepthModel(
+                path=model_path,
+                scale=0.000305,
+                shift=0.1378,
+                invert=True,
+                backbone="vitb_rn50_384",
+                non_negative=True,
+                enable_attention_hooks=False,
+            )
+            self.net_w = 640
+            self.net_h = 480
+            resize_mode="minimal"
+            normalization = NormalizeImage(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+
         else:
             print(f"model_type '{self.args.variant}' not implemented, use: --model_type large")
             assert False

@@ -45,6 +45,7 @@ def run(input_path, output_path, model_path, model_type="dpt_hybrid", optimize=T
         net_w = net_h = 384
         model = DPTDepthModel(
             path=model_path,
+            invert=True,
             backbone="vitb_rn50_384",
             non_negative=True,
             enable_attention_hooks=False,
@@ -221,8 +222,8 @@ if __name__ == "__main__":
         "midas_v21": "weights/midas_v21-f6b98070.pt",
         "dpt_large": "weights/dpt_large-midas-b53ba79e.pt",
         "dpt_hybrid": "weights/dpt_hybrid-midas-d889a10e.pt",
-        "dpt_hybrid_kitti": "weights/dpt_hybrid-nyu-b3a2ef48.pt",
-        "dpt_hybrid_nyu": "weights/dpt_hybrid_nyu-2ce69ec7.pt",
+        "dpt_hybrid_kitti": "weights/dpt_hybrid-kitti-e7069aae.pt",
+        "dpt_hybrid_nyu": "weights/dpt_hybrid-nyu-b3a2ef48.pt",
     }
 
     if args.model_weights is None:

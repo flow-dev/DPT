@@ -86,6 +86,10 @@ def run(input_path, output_path, checkpoint):
                 .numpy()
             )
 
+        # import matplotlib.pyplot as plt
+        # plt.imshow(prediction)
+        # plt.show()
+
         filename = os.path.join(
             output_path, os.path.splitext(os.path.basename(img_name))[0]
         )
